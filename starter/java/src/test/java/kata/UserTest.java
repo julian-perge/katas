@@ -27,7 +27,7 @@ class UserTest {
       testUser.publishMessage(details);
 
       assertThat(testUser.getTimeline()).hasSize(1);
-      assertThat(testUser.getTimeline().getFirst().getDetails()).isEqualTo("new message");
+      assertThat(testUser.getTimeline().getFirst().getDetails()).isEqualTo("test message");
     }
 
     @Test
