@@ -2,6 +2,7 @@ package kata;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Comparator;
 
 public class Message {
 
@@ -44,7 +45,7 @@ public class Message {
     return String.format("(%s)", messageFormatted);
   }
 
-  private String getFormatForTimeUnit(long timeUnit, String timeUnitSimpleName) {
+  private String getFormatForTimeUnit(final long timeUnit, final String timeUnitSimpleName) {
     return String.format("%s %s%s ago", timeUnit, timeUnitSimpleName, appendIfPlural(timeUnit));
   }
 
@@ -57,7 +58,10 @@ public class Message {
     return this.getDetails() + " " + calculateTimeFromWhenPosted();
   }
 
-  public String formatMessageWithUsersName() {
+  public String formatMessageWithNameOfUser() {
     return this.getUserWhoPostedMessage().getName() + " - " + this.formatMessage();
   }
+
+  public static final Comparator<Message> sortByTimeStamp =
+      Comparator.comparing(Message::getTimestamp);
 }

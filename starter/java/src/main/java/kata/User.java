@@ -1,12 +1,14 @@
 package kata;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class User {
 
-  private final Stack<Message> timeline = new Stack<>();
+  private final Deque<Message> timeline = new ArrayDeque<>();
   private final String name;
   private final Set<User> following = new HashSet<>();
 
@@ -22,15 +24,34 @@ public class User {
     return following;
   }
 
-  public Stack<Message> getTimeline() {
+  public Deque<Message> getTimeline() {
     return timeline;
   }
 
-  public boolean follow(User anotherUser) {
+  public String viewPersonalTimeline() {
+    return this.getTimeline().stream()
+        .map(Message::formatMessage)
+        .collect(Collectors.joining("\n"));
+  }
+
+  public String viewWall() {
+    Deque<Message> allPosts = this.getTimeline();
+    this.getUsersYouFollow().stream().map(User::getTimeline).forEach(allPosts::addAll);
+    return allPosts.stream()
+        .sorted(Message.sortByTimeStamp.reversed())
+        .map(Message::formatMessageWithNameOfUser)
+        .collect(Collectors.joining("\n"));
+  }
+
+  public boolean follow(final User anotherUser) {
     return this.getUsersYouFollow().add(anotherUser);
   }
 
-  public Message publishMessage(final String details) {
-    return this.getTimeline().push(new Message(this, details));
+  public void publishMessage(final String details) {
+    this.getTimeline().push(new Message(this, details));
+  }
+
+  public String viewTimelineOfUser(final User otherUser) {
+    return otherUser.viewPersonalTimeline();
   }
 }

@@ -41,7 +41,7 @@ class MessageTest {
 
     String expectedValue = "Julian - i love shrimp (1 minute ago)";
 
-    String actualValue = message.formatMessageWithUsersName();
+    String actualValue = message.formatMessageWithNameOfUser();
 
     assertThat(actualValue).isEqualTo(expectedValue);
   }
