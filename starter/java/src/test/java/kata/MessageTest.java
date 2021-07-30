@@ -2,8 +2,11 @@ package kata;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 class MessageTest {
 
@@ -24,6 +27,7 @@ class MessageTest {
   void calculateTimeFromWhenPostedSingleTimeUnit() {
     String expectedValue = "(1 second ago)";
 
+    when(testMessage.getTimestamp()).thenReturn(Instant.now().minusSeconds(1));
     String actualValue = testMessage.calculateTimeFromWhenPosted();
 
     assertThat(actualValue).isEqualTo(expectedValue);

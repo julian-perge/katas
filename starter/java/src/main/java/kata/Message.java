@@ -1,5 +1,6 @@
 package kata;
 
+import java.time.Duration;
 import java.time.Instant;
 
 public class Message {
@@ -27,7 +28,7 @@ public class Message {
   }
 
   public String calculateTimeFromWhenPosted() {
-    return null;
+    return String.valueOf(Duration.between(this.getTimestamp(), Instant.now()).getSeconds());
   }
 
   public String formatMessage() {
