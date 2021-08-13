@@ -38,7 +38,7 @@ public class User {
     Deque<Message> allPosts = this.getTimeline();
     this.getUsersYouFollow().stream().map(User::getTimeline).forEach(allPosts::addAll);
     return allPosts.stream()
-        .sorted(Message.sortByTimeStamp.reversed())
+        .sorted(Message.SORT_BY_TIME_STAMP.reversed())
         .map(Message::formatMessageWithNameOfUser)
         .collect(Collectors.joining("\n"));
   }

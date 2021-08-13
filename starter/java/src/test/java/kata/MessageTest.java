@@ -49,35 +49,42 @@ class MessageTest {
   @Nested
   class AppendIfPluralTests {
 
-    String timeUnitSimpleName = "hour";
+    private final String timeUnitSimpleName = "hour";
 
     @Test
-    void doNotAppendLetterSIfLessThanZero() {
+    void doNotMakePluralIfTimeUnitIsLessThanZero() {
+      String expectedValue = "hour";
 
-      String actualValue = testMessage.appendIfPlural(timeUnitSimpleName, -1);
+      String actualValue = testMessage.appendIfPlural(-1, timeUnitSimpleName);
 
-      assertThat(actualValue).isEmpty();
+      assertThat(actualValue).isEqualTo(expectedValue);
     }
 
     @Test
-    void doNotAppendLetterSIfEqualToOne() {
-      String actualValue = testMessage.appendIfPlural(timeUnitSimpleName, 1);
+    void doNotMakePluralIfTimeUnitIsEqualToOne() {
+      String expectedValue = "hour";
 
-      assertThat(actualValue).isEmpty();
+      String actualValue = testMessage.appendIfPlural(1, timeUnitSimpleName);
+
+      assertThat(actualValue).isEqualTo(expectedValue);
     }
 
     @Test
-    void appendLetterSIfZero() {
-      String actualValue = testMessage.appendIfPlural(timeUnitSimpleName, 0);
+    void makePluralIfTimeUnitIsEqualToZero() {
+      String expectedValue = "hours";
 
-      assertThat(actualValue).isEqualTo("s");
+      String actualValue = testMessage.appendIfPlural(0, timeUnitSimpleName);
+
+      assertThat(actualValue).isEqualTo(expectedValue);
     }
 
     @Test
-    void appendLetterSIfGreaterThanOne() {
-      String actualValue = testMessage.appendIfPlural(timeUnitSimpleName, 2);
+    void makePluralIfTimeUnitIsGreaterThanOne() {
+      String expectedValue = "hours";
 
-      assertThat(actualValue).isEqualTo("s");
+      String actualValue = testMessage.appendIfPlural(2, timeUnitSimpleName);
+
+      assertThat(actualValue).isEqualTo(expectedValue);
     }
   }
 

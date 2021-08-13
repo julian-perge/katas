@@ -46,10 +46,10 @@ public class Message {
   }
 
   private String getFormatForTimeUnit(final long timeUnit, final String timeUnitSimpleName) {
-    return String.format("%s %s ago", timeUnit, appendIfPlural(timeUnitSimpleName, timeUnit));
+    return String.format("%s %s ago", timeUnit, appendIfPlural(timeUnit, timeUnitSimpleName));
   }
 
-  public String appendIfPlural(final String timeUnitSimpleName, final long timeUnit) {
+  public String appendIfPlural(final long timeUnit, final String timeUnitSimpleName) {
     if (timeUnit < 0 || timeUnit == 1) return timeUnitSimpleName;
     else return timeUnitSimpleName + "s";
   }
@@ -62,6 +62,6 @@ public class Message {
     return this.getUserWhoPostedMessage().getName() + " - " + this.formatMessage();
   }
 
-  public static final Comparator<Message> sortByTimeStamp =
+  public static final Comparator<Message> SORT_BY_TIME_STAMP =
       Comparator.comparing(Message::getTimestamp);
 }
