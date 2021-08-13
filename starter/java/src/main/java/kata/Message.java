@@ -46,12 +46,12 @@ public class Message {
   }
 
   private String getFormatForTimeUnit(final long timeUnit, final String timeUnitSimpleName) {
-    return String.format("%s %s%s ago", timeUnit, timeUnitSimpleName, appendIfPlural(timeUnit));
+    return String.format("%s %s ago", timeUnit, appendIfPlural(timeUnitSimpleName, timeUnit));
   }
 
-  public String appendIfPlural(final long timeUnit) {
-    if (timeUnit < 0 || timeUnit == 1) return "";
-    else return "s";
+  public String appendIfPlural(final String timeUnitSimpleName, final long timeUnit) {
+    if (timeUnit < 0 || timeUnit == 1) return timeUnitSimpleName;
+    else return timeUnitSimpleName + "s";
   }
 
   public String formatMessage() {
