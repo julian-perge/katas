@@ -35,7 +35,7 @@ public class User {
   }
 
   public String viewWall() {
-    Deque<Message> allPosts = this.getTimeline();
+    Deque<Message> allPosts = new ArrayDeque<>(this.getTimeline());
     this.getUsersYouFollow().stream().map(User::getTimeline).forEach(allPosts::addAll);
     return allPosts.stream()
         .sorted(Message.SORT_BY_TIME_STAMP.reversed())
@@ -53,5 +53,9 @@ public class User {
 
   public String viewTimelineOfUser(final User otherUser) {
     return otherUser.viewPersonalTimeline();
+  }
+
+  public void unfollow(User otherUser) {
+    this.getUsersYouFollow().remove(otherUser);
   }
 }

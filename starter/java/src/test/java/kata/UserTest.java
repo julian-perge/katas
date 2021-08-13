@@ -204,4 +204,30 @@ class UserTest {
       assertThat(actualValue).isEqualTo(expectedValue);
     }
   }
+
+  @Nested
+  class UnfollowTests {
+
+    User anotherUser = new User("Alice");
+
+    @Test
+    void userUnfollowsOtherUser() {
+      User otherUser = new User("Bob");
+      anotherUser.follow(otherUser);
+      anotherUser.unfollow(otherUser);
+      assertThat(anotherUser.getUsersYouFollow()).doesNotContain(otherUser);
+    }
+
+    @Test
+    void whenUserAUnfollowsUserBThenUserBDoesNotShowOnUserAWall() {
+      User otherUser = new User("Bob");
+      anotherUser.follow(otherUser);
+      otherUser.publishMessage("Alice is being mean to me");
+
+      assertThat(anotherUser.viewWall()).contains("Bob");
+      anotherUser.unfollow(otherUser);
+
+      assertThat(anotherUser.viewWall()).doesNotContain("Bob");
+    }
+  }
 }
