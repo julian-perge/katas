@@ -34,7 +34,7 @@ public class User {
 
   public String viewWall() {
     return Stream.concat(this.getTimeline().stream(), this.getUsersYouFollow().stream()
-            .flatMap((User user) -> user.getTimeline().stream()).collect(Collectors.toList()).stream())
+            .flatMap((User user) -> user.getTimeline().stream()))
         .sorted(Message.SORT_BY_TIME_STAMP.reversed())
         .map(Message::formatMessageWithNameOfUser)
         .collect(Collectors.joining("\n"));
