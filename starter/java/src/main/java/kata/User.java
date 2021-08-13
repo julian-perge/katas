@@ -6,53 +6,68 @@ import java.util.stream.Stream;
 
 public class User {
 
-  private final Deque<Message> timeline = new ArrayDeque<>();
-  private final String name;
-  private final Set<User> following = new HashSet<>();
+    private final Deque<Message> timeline = new ArrayDeque<>();
+    private final String name;
+    private final Set<User> following = new HashSet<>();
 
-  public User(String name) {
-    this.name = name;
-  }
+    public Set<User> getBlocked() {
+        return blocked;
+    }
 
-  public String getName() {
-    return name;
-  }
+    private final Set<User> blocked = new HashSet<>();
 
-  public Set<User> getUsersYouFollow() {
-    return following;
-  }
+    public User(String name) {
+        this.name = name;
+    }
 
-  public Deque<Message> getTimeline() {
-    return timeline;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String viewPersonalTimeline() {
-    return this.getTimeline().stream()
-        .map(Message::formatMessage)
-        .collect(Collectors.joining("\n"));
-  }
+    public Set<User> getUsersYouFollow() {
+        return following;
+    }
 
-  public String viewWall() {
-    return Stream.concat(this.getTimeline().stream(), this.getUsersYouFollow().stream()
-            .flatMap((User user) -> user.getTimeline().stream()))
-        .sorted(Message.SORT_BY_TIME_STAMP.reversed())
-        .map(Message::formatMessageWithNameOfUser)
-        .collect(Collectors.joining("\n"));
-  }
+    public Deque<Message> getTimeline() {
+        return timeline;
+    }
 
-  public boolean follow(final User anotherUser) {
-    return this.getUsersYouFollow().add(anotherUser);
-  }
+    public String viewPersonalTimeline() {
+        return this.getTimeline().stream()
+                .map(Message::formatMessage)
+                .collect(Collectors.joining("\n"));
+    }
 
-  public void publishMessage(final String details) {
-    this.getTimeline().push(new Message(this, details));
-  }
+    public String viewWall() {
+        return Stream.concat(this.getTimeline().stream(), this.getUsersYouFollow().stream()
+                        .flatMap((User user) -> user.getTimeline().stream()))
+                .sorted(Message.SORT_BY_TIME_STAMP.reversed())
+                .map(Message::formatMessageWithNameOfUser)
+                .collect(Collectors.joining("\n"));
+    }
 
-  public String viewTimelineOfUser(final User otherUser) {
-    return otherUser.viewPersonalTimeline();
-  }
+    public boolean follow(final User anotherUser) {
+        if(anotherUser.getBlocked().contains(this)){
+            return false;
+        }
+        return this.getUsersYouFollow().add(anotherUser);
+    }
 
-  public void unfollow(User otherUser) {
-    this.getUsersYouFollow().remove(otherUser);
-  }
+    public void publishMessage(final String details) {
+        this.getTimeline().push(new Message(this, details));
+    }
+
+    public String viewTimelineOfUser(final User otherUser) {
+        return otherUser.viewPersonalTimeline();
+    }
+
+    public void unfollow(User otherUser) {
+        this.getUsersYouFollow().remove(otherUser);
+    }
+
+    public void block(User otherUser) {
+        this.blocked.add(otherUser);
+        this.unfollow(otherUser);
+        otherUser.unfollow(this);
+    }
 }
