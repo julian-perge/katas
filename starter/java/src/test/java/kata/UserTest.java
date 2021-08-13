@@ -223,10 +223,8 @@ class UserTest {
       User otherUser = new User("Bob");
       anotherUser.follow(otherUser);
       otherUser.publishMessage("Alice is being mean to me");
-
       assertThat(anotherUser.viewWall()).contains("Bob");
       anotherUser.unfollow(otherUser);
-
       assertThat(anotherUser.viewWall()).doesNotContain("Bob");
     }
   }

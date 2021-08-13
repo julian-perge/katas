@@ -1,10 +1,8 @@
 package kata;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class User {
 
@@ -35,9 +33,8 @@ public class User {
   }
 
   public String viewWall() {
-    Deque<Message> allPosts = new ArrayDeque<>(this.getTimeline());
-    this.getUsersYouFollow().stream().map(User::getTimeline).forEach(allPosts::addAll);
-    return allPosts.stream()
+    return Stream.concat(this.getTimeline().stream(), this.getUsersYouFollow().stream()
+            .flatMap((User user) -> user.getTimeline().stream()).collect(Collectors.toList()).stream())
         .sorted(Message.SORT_BY_TIME_STAMP.reversed())
         .map(Message::formatMessageWithNameOfUser)
         .collect(Collectors.joining("\n"));
